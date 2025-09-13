@@ -55,8 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
           key: _formKey,
           child: Column(
             children: [
-              const SizedBox(height: 50),
-              const FlutterLogo(size: 100),
               const SizedBox(height: 30),
               FormBuilderTextField(
                 name: 'email',

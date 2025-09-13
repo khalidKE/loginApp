@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static const String baseUrl = 'https://api.escuelajs.co/api/v1';
   
-  // Login user
   static Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -19,7 +18,6 @@ class AuthService {
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
-        // Save tokens
         await _saveTokens(
           data['access_token'],
           data['refresh_token'],
@@ -36,9 +34,8 @@ class AuthService {
     }
   }
 
-  // Register user
   static Future<Map<String, dynamic>> register(
-      String name, String email, String password, String avatar) async {
+      String name, String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/users/'),
@@ -47,12 +44,11 @@ class AuthService {
           'name': name,
           'email': email,
           'password': password,
-          'avatar': avatar.isEmpty ? 'https://picsum.photos/200' : avatar,
+          'avatar': 'https://api.lorem.space/image/face?w=200&h=200',
         }),
       );
 
       if (response.statusCode == 201) {
-        // After successful registration, log the user in
         return await login(email, password);
       } else {
         final error = jsonDecode(response.body);
@@ -63,32 +59,27 @@ class AuthService {
     }
   }
 
-  // Save tokens to shared preferences
   static Future<void> _saveTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', accessToken);
     await prefs.setString('refresh_token', refreshToken);
   }
 
-  // Get access token from shared preferences
   static Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('access_token');
   }
 
-  // Get refresh token from shared preferences
   static Future<String?> getRefreshToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('refresh_token');
   }
 
-  // Check if user is logged in
   static Future<bool> isLoggedIn() async {
     final accessToken = await getAccessToken();
     return accessToken != null && accessToken.isNotEmpty;
   }
 
-  // Get auth headers with access token
   static Future<Map<String, String>> getAuthHeaders() async {
     final accessToken = await getAccessToken();
     return {
@@ -97,7 +88,6 @@ class AuthService {
     };
   }
 
-  // Refresh access token
   static Future<bool> refreshToken() async {
     try {
       final refreshToken = await getRefreshToken();
@@ -123,7 +113,6 @@ class AuthService {
     }
   }
 
-  // Logout user
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');

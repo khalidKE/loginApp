@@ -7,7 +7,6 @@ import 'services/auth_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Check if user is already logged in
   final isLoggedIn = await AuthService.isLoggedIn();
   
   runApp(MyApp(isLoggedIn: isLoggedIn));

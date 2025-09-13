@@ -25,7 +25,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final email = _formKey.currentState?.fields['email']?.value as String;
       final password = _formKey.currentState?.fields['password']?.value as String;
       final confirmPassword = _formKey.currentState?.fields['confirmPassword']?.value as String;
-      final avatar = _formKey.currentState?.fields['avatar']?.value as String? ?? '';
 
       if (password != confirmPassword) {
         setState(() => _isLoading = false);
@@ -39,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
 
-      final result = await AuthService.register(name, email, password, avatar);
+      final result = await AuthService.register(name, email, password);
       
       setState(() => _isLoading = false);
 
@@ -78,8 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               const SizedBox(height: 30),
-              const FlutterLogo(size: 100),
-              const SizedBox(height: 20),
               FormBuilderTextField(
                 name: 'name',
                 decoration: const InputDecoration(
@@ -144,15 +141,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FormBuilderValidators.required(
                       errorText: 'Please confirm your password'),
                 ]),
-              ),
-              const SizedBox(height: 16),
-              FormBuilderTextField(
-                name: 'avatar',
-                decoration: const InputDecoration(
-                  labelText: 'Avatar URL (optional)',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.image),
-                ),
               ),
               const SizedBox(height: 24),
               SizedBox(
